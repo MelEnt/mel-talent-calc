@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { SPRITE_MAP, ICON_SIZE, SPRITE_COLUMNS, SPRITE_ROWS } from '../utils/spriteMap'
+import { useAsset } from '../hooks/useAsset'
 
 type IconProps = {
   name: string
@@ -10,7 +11,7 @@ type IconProps = {
 }
 
 export const Icon = ({ name, size = 56, className = '', style, responsive = false }: IconProps) => {
-  const spriteUrl = '/src/assets/icons/spritesheet.webp'
+  const spriteUrl = useAsset('icons/spritesheet.webp')
   
   const position = useMemo(() => {
     // Remove .webp extension if present
@@ -25,7 +26,7 @@ export const Icon = ({ name, size = 56, className = '', style, responsive = fals
     return pos // Return the actual pixel positions
   }, [name])
   
-  if (!position) {
+  if (!position || !spriteUrl) {
     return null
   }
   
@@ -36,16 +37,12 @@ export const Icon = ({ name, size = 56, className = '', style, responsive = fals
     const spriteWidthPercent = SPRITE_COLUMNS * 100
     const spriteHeightPercent = SPRITE_ROWS * 100
     
-    const cssStyle = {
+    const cssStyle: React.CSSProperties = {
       backgroundImage: `url(${spriteUrl})`,
       backgroundPosition: `${xPercent}% ${yPercent}%`,
       backgroundSize: `${spriteWidthPercent}% ${spriteHeightPercent}%`,
       // Retina-optimized image rendering
-      imageRendering: 'auto',
-      WebkitImageRendering: 'auto',
-      MozImageRendering: 'auto',
-      msInterpolationMode: 'bicubic',
-      WebkitFontSmoothing: 'subpixel-antialiased',
+      imageRendering: 'auto' as const,
       ...style,
     }
     
@@ -64,18 +61,14 @@ export const Icon = ({ name, size = 56, className = '', style, responsive = fals
   const bgX = -position.x * scaleFactor
   const bgY = -position.y * scaleFactor
   
-  const spriteStyle = {
+  const spriteStyle: React.CSSProperties = {
     width: `${size}px`,
     height: `${size}px`,
     backgroundImage: `url(${spriteUrl})`,
     backgroundPosition: `${bgX}px ${bgY}px`,
     backgroundSize: `${spriteWidth}px ${spriteHeight}px`,
     // Retina-optimized image rendering
-    imageRendering: 'auto',
-    WebkitImageRendering: 'auto',
-    MozImageRendering: 'auto',
-    msInterpolationMode: 'bicubic',
-    WebkitFontSmoothing: 'subpixel-antialiased',
+    imageRendering: 'auto' as const,
     ...style,
   }
   

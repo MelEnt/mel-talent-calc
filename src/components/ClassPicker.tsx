@@ -86,7 +86,7 @@ export const ClassPicker = ({
             <img
               src={GoldRing}
               alt='Gold Ring'
-              className='absolute z-10 left-0 pointer-events-none object-contain w-full h-full top-0 scale-[1.3]
+              className='absolute z-10 left-0 pointer-events-none object-contain w-full h-full top-1 scale-[1.34]
               [@media(max-width:420px)]:top-[-12px] [@media(max-width:420px)]:h-[84px]
               [@media(min-width:420px)]:top-0 [@media(min-width:420px)]:h-full
               [@media(min-width:768px)]:h-[140px] [@media(min-width:768px)]:top-[-17px]'
@@ -95,7 +95,7 @@ export const ClassPicker = ({
           <Icon
             name={`classicon_${selectedClass}.webp`}
             size={105}
-            className='relative z-1 rounded-full top-0 left-0
+            className='relative z-1 rounded-full top-[1px] left-0
             scale-[0.59] origin-top-left [@media(min-width:640px)]:scale-100'
           />
         </div>
@@ -104,7 +104,7 @@ export const ClassPicker = ({
             <img
               src={GoldRing}
               alt='Gold Ring'
-              className='absolute z-10 left-0 pointer-events-none object-contain w-full h-full top-0 scale-[1.3] opacity-75'
+              className='absolute z-10 left-0 pointer-events-none object-contain w-full h-full scale-[1.34] opacity-75'
             />
           )}
           <Icon

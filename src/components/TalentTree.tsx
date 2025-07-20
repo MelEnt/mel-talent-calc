@@ -89,7 +89,7 @@ export const TalentTree = ({
               <Icon
                 name={specIcon}
                 size={64}
-                className='absolute rounded-full top-[-3px] left-[-3px]'
+                className='absolute rounded-full top-[-3px] left-[-3px] scale-[0.96]'
               />
             </div>
 
