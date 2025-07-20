@@ -10,6 +10,7 @@ import {
 import { MetalBorders } from './MetalBorders'
 import { useViewport } from '../hooks/useViewport'
 import { useAsset } from '../hooks/useAsset'
+import { Icon } from './Icon'
 
 export type TTalentTreeProps = {
   name: string
@@ -39,7 +40,6 @@ export const TalentTree = ({
     containerWidth,
   } = useViewport()
   const treeBackground = useAsset(backgroundImage)
-  const treeIcon = useAsset(specIcon)
   const ResetSprite = useAsset('ui/reset-button-sprite.webp')
   const RockBackground = useAsset('ui/background-rock.webp')
 
@@ -86,13 +86,11 @@ export const TalentTree = ({
                 borderWidth: '3px',
               }}
             >
-              {treeIcon && (
-                <img
-                  src={treeIcon}
-                  alt='Spec Icon'
-                  className='absolute rounded-full w-[64px] h-[58px]  scale-[1.06]'
-                />
-              )}
+              <Icon
+                name={specIcon}
+                size={64}
+                className='absolute rounded-full top-[-3px] left-[-3px]'
+              />
             </div>
 
             <h1 className='text-2xl text-center flex-grow text-gold-text'>

@@ -5,6 +5,7 @@ import {
   CLASS_COLORS,
 } from '../core/constants'
 import { useAsset } from '../hooks/useAsset'
+import { Icon } from './Icon'
 import { ClassPickerGridIcons } from './ClassPickerGridIcons'
 
 // 🌟 Shadow helpers
@@ -33,11 +34,7 @@ export const ClassPicker = ({
 }: ClassPickerProps) => {
   const [hoveredClass, setHoveredClass] =
     useState<ClassName | null>(null)
-  const selectedClassIcon = useAsset(
-    `classicon_${selectedClass}.webp`
-  )
   const GoldRing = useAsset('gold-ring.webp')
-  const SpecIcon = useAsset(primaryTree.specIcon)
 
   const isTouchDevice =
     typeof window !== 'undefined' &&
@@ -95,14 +92,12 @@ export const ClassPicker = ({
               [@media(min-width:768px)]:h-[140px] [@media(min-width:768px)]:top-[-17px]'
             />
           )}
-          {selectedClassIcon && (
-            <img
-              src={selectedClassIcon}
-              alt={selectedClass}
-              className='relative z-1 object-cover rounded-full w-auto h-auto top-0 left-0
-              [@media(min-width:768px)]:w-[105px] [@media(min-width:768px)]:h-[105px]'
-            />
-          )}
+          <Icon
+            name={`classicon_${selectedClass}.webp`}
+            size={105}
+            className='relative z-1 rounded-full top-0 left-0
+            scale-[0.59] origin-top-left [@media(min-width:640px)]:scale-100'
+          />
         </div>
         {primaryTree.name && <div className='absolute z-15 w-[30px] h-[30px] translate-x-[40px] translate-y-[30px] sm:w-[45px] sm:h-[45px] sm:translate-x-[72.5px] sm:translate-y-[48px]'>
           {GoldRing && (
@@ -112,13 +107,12 @@ export const ClassPicker = ({
               className='absolute z-10 left-0 pointer-events-none object-contain w-full h-full top-0 scale-[1.3] opacity-75'
             />
           )}
-          {SpecIcon && (
-            <img
-              src={SpecIcon}
-              alt={selectedClass}
-              className='relative z-1 object-cover rounded-full w-auto h-auto top-0 left-0'
-            />
-          )}
+          <Icon
+            name={primaryTree.specIcon}
+            size={45}
+            className='relative z-1 rounded-full top-0 left-0
+            scale-[0.67] origin-top-left [@media(min-width:640px)]:scale-100'
+          />
         </div>}
 
         {/* 📈 Info Column */}

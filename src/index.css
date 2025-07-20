@@ -165,6 +165,14 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* Retina display optimizations for sprite icons */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    .bg-no-repeat {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: optimize-quality;
+    }
+  }
+
   .down-arrow::before {
     @apply absolute w-[56px] pointer-events-none;
     content: '';

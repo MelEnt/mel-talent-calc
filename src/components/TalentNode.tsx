@@ -4,6 +4,7 @@ import {
   type MouseEvent,
 } from 'react'
 import { useAsset } from '../hooks/useAsset'
+import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
 import { AbilityDataSection } from './AbilityDataSection'
 import type { Talent } from '../core/types'
@@ -58,7 +59,7 @@ export const TalentNode = ({
     useRef<HTMLButtonElement | null>(null)
   const [isHovered, setHovered] = useState(false)
   const [isPressed, setPressed] = useState(false)
-  const iconUrl = useAsset(icon)
+  // iconUrl no longer needed - using sprite Icon component
   const FrameDefault = useAsset('ui/talent-frame-default.webp')
   const FrameDefaultOuter = useAsset('ui/talent-frame-default-outer.webp')
   const FrameGold = useAsset('ui/talent-frame-gold.webp')
@@ -200,21 +201,21 @@ export const TalentNode = ({
         />
 
         {/* 🎯 Icon */}
-        <span
-          className={`absolute z-10 bg-center bg-no-repeat bg-cover pointer-events-none ${
+        <Icon
+          name={icon}
+          size={48}
+          className={`absolute z-10 pointer-events-none ${
             isPressed
               ? 'brightness-90 shadow-inner'
               : ''
+          } ${
+            shouldGrayOut
+              ? 'grayscale'
+              : ''
           }`}
           style={{
-            width: '48px',
-            height: '48px',
             left: isPressed && canBeClicked ? '7px' : '4px',
             top: isPressed && canBeClicked ? '7px' : '5px',
-            backgroundImage: `url(${iconUrl})`,
-            filter: shouldGrayOut
-              ? 'grayscale(100%)'
-              : undefined,
           }}
         />
 

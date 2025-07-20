@@ -1,5 +1,6 @@
 import { type ClassName } from '../core/types'
 import { useAsset } from '../hooks/useAsset'
+import { Icon } from './Icon'
 
 type TClassPickerGridIcons = {
   className: ClassName
@@ -21,9 +22,6 @@ export const ClassPickerGridIcons = (
     setSelectedClass,
     setHoveredClass,
   } = props
-  const classIcon = useAsset(
-    `classicon_${className}.webp`
-  )
   const GoldRing = useAsset('gold-ring.webp')
 
   const isTouchDevice =
@@ -52,14 +50,13 @@ export const ClassPickerGridIcons = (
         />
       )}
       {/* 🌟 Class Icon with glow */}
-      {classIcon && (
-        <img
-          src={classIcon}
-          alt={className}
-          style={{ boxShadow }}
-          className='z-0 object-cover rounded-full w-[48px] h-[48px] sm:w-[67px] sm:h-[67px] transition-shadow duration-200'
-        />
-      )}
+      <Icon
+        name={`classicon_${className}.webp`}
+        size={67}
+        className='z-0 rounded-full transition-shadow duration-200
+        scale-[0.72] origin-center sm:scale-100'
+        style={{ boxShadow }}
+      />
     </button>
   )
 }
