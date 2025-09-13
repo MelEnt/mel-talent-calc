@@ -1,17 +1,17 @@
 import { type MouseEvent } from 'react'
-import { TalentNode } from './TalentNode'
-import type { Talent } from '../core/types'
-import { getArrowProps } from '../core/talentUtils'
+import RockBackground from '../assets/ui/background-rock.webp?w=400&h=100&imagetools'
+import ResetSprite from '../assets/ui/reset-button-sprite.webp?w=65&h=121&imagetools'
 import {
-  isTalentLocked,
   canIncrementTalent,
   canSafelyDecrementTalent,
+  getArrowProps,
+  isTalentLocked,
 } from '../core/talentUtils'
-import { MetalBorders } from './MetalBorders'
-import { useViewport } from '../hooks/useViewport'
+import type { Talent } from '../core/types'
 import { useAsset } from '../hooks/useAsset'
-import ResetSprite from '../assets/ui/reset-button-sprite.webp?w=65&h=121&imagetools'
-import RockBackground from '../assets/ui/background-rock.webp?w=400&h=100&imagetools'
+import { useViewport } from '../hooks/useViewport'
+import { MetalBorders } from './MetalBorders'
+import { TalentNode } from './TalentNode'
 
 export type TTalentTreeProps = {
   name: string

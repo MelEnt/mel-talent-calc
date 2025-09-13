@@ -1,135 +1,190 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/vite.svg"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>Talent Calculator - Project Epoch</title>
-    
-    <!-- Industry Standard Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="dns-prefetch" href="https://vercel.live">
-    
-    <!-- Critical Font Preloads (Core Web Vitals Best Practice) -->
-    <link rel="preload" href="/fonts/FrizQuadrataStd.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/FrizQuadrataStd-Bold.woff2" as="font" type="font/woff2" crossorigin>
-    
-    <!-- Critical Image Preloads for LCP - using actual built asset path -->
-    <link rel="preload" href="/assets/parchment-sprite-bg-Bdw0iHDe.webp" as="image" type="image/webp" fetchpriority="high">
-    
-    <!-- Critical JavaScript Preloads -->
-    <link rel="modulepreload" href="/src/main.tsx">
-    <link rel="modulepreload" href="/src/App.tsx">
-    <link rel="modulepreload" href="/src/components/Header.tsx">
-    
-    <!-- Critical CSS for immediate header render -->
-    <style>
-      /* Prevent layout shift while JS loads */
-      .header-bg-blur {
-        background: radial-gradient(ellipse at center, #2a2017 0%, #1a1510 50%, #0a0805 100%);
-        position: absolute;
-        inset: 0;
-        opacity: 1;
-        transition: opacity 300ms ease;
-      }
-      
-      /* Critical LCP text styles - render immediately without waiting for React */
-      .critical-h1 {
-        font-family: 'FrizQuadrata', Georgia, serif;
-        font-size: 3rem;
-        color: rgb(255, 215, 0);
-        text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);
-        letter-spacing: 0.33px;
-        position: relative;
-        z-index: 10;
-        margin: 0;
-        text-align: center;
-      }
-      @media (min-width: 640px) {
-        .critical-h1 {
-          font-size: 4.5rem;
-        }
-      }
-      
-      /* Prevent invisible text during font swap */
-      .font-loading {
-        font-family: Georgia, 'Times New Roman', serif;
-      }
-      
-      /* React root styling */
-      #root {
-        min-height: 100vh;
-        background: #000;
-      }
-      
-      /* Critical Tailwind classes for immediate LCP rendering */
-      .max-w-\[85rem\] { max-width: 85rem; }
-      .mx-auto { margin-left: auto; margin-right: auto; }
-      .flex { display: flex; }
-      .relative { position: relative; }
-      .w-full { width: 100%; }
-      .h-full { height: 100%; }
-      .min-h-\[440px\] { min-height: 440px; }
-      .p-3 { padding: 0.75rem; }
-      .p-4 { padding: 1rem; }
-      .h-\[90px\] { height: 90px; }
-      .h-\[200px\] { height: 200px; }
-      .w-\[85\%\] { width: 85%; }
-      .items-center { align-items: center; }
-      .overflow-hidden { overflow: hidden; }
-      
-      /* Scoped justify-center ONLY for critical header to prevent layout shift */
-      #critical-header.justify-center { justify-content: center; }
-      
-      @media (min-width: 768px) {
-        .md\:min-h-\[340px\] { min-height: 340px; }
-        .md\:hidden { display: none; }
-      }
-      
-      /* Hide React header when critical header is active */
-      #critical-header {
-        transition: opacity 300ms ease-out;
-      }
-      
-      .react-loaded #critical-header {
-        opacity: 0;
-        pointer-events: none;
-      }
-      
-      /* Smooth fade for React content */
-      .react-loaded #root > div {
-        animation: fadeIn 300ms ease-out;
-      }
-      
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      
-    </style>
-  </head>
 
-  <body>
-    <div id="root">
-    
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talent Calculator - Project Epoch</title>
+
+  <!-- Industry Standard Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="dns-prefetch" href="https://vercel.live">
+
+  <!-- Critical Font Preloads (Core Web Vitals Best Practice) -->
+  <link rel="preload" href="/fonts/FrizQuadrataStd.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/FrizQuadrataStd-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Critical Image Preloads for LCP - using actual built asset path -->
+  <link rel="preload" href="/assets/parchment-sprite-bg-Bdw0iHDe.webp" as="image" type="image/webp"
+    fetchpriority="high">
+
+  <!-- Critical JavaScript Preloads -->
+  <link rel="modulepreload" href="/src/main.tsx">
+  <link rel="modulepreload" href="/src/App.tsx">
+  <link rel="modulepreload" href="/src/components/Header.tsx">
+
+  <!-- Critical CSS for immediate header render -->
+  <style>
+    /* Prevent layout shift while JS loads */
+    .header-bg-blur {
+      background: radial-gradient(ellipse at center, #2a2017 0%, #1a1510 50%, #0a0805 100%);
+      position: absolute;
+      inset: 0;
+      opacity: 1;
+      transition: opacity 300ms ease;
+    }
+
+    /* Critical LCP text styles - render immediately without waiting for React */
+    .critical-h1 {
+      font-family: 'FrizQuadrata', Georgia, serif;
+      font-size: 3rem;
+      color: rgb(255, 215, 0);
+      text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);
+      letter-spacing: 0.33px;
+      position: relative;
+      z-index: 10;
+      margin: 0;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .critical-h1 {
+        font-size: 4.5rem;
+      }
+    }
+
+    /* Prevent invisible text during font swap */
+    .font-loading {
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    /* React root styling */
+    #root {
+      min-height: 100vh;
+      background: #000;
+    }
+
+    /* Critical Tailwind classes for immediate LCP rendering */
+    .max-w-\[85rem\] {
+      max-width: 85rem;
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .relative {
+      position: relative;
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    .h-full {
+      height: 100%;
+    }
+
+    .min-h-\[440px\] {
+      min-height: 440px;
+    }
+
+    .p-3 {
+      padding: 0.75rem;
+    }
+
+    .p-4 {
+      padding: 1rem;
+    }
+
+    .h-\[90px\] {
+      height: 90px;
+    }
+
+    .h-\[200px\] {
+      height: 200px;
+    }
+
+    .w-\[85\%\] {
+      width: 85%;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    /* Scoped justify-center ONLY for critical header to prevent layout shift */
+    #critical-header.justify-center {
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .md\:min-h-\[340px\] {
+        min-height: 340px;
+      }
+
+      .md\:hidden {
+        display: none;
+      }
+    }
+
+    /* Hide React header when critical header is active */
+    #critical-header {
+      transition: opacity 300ms ease-out;
+    }
+
+    .react-loaded #critical-header {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Smooth fade for React content */
+    .react-loaded #root>div {
+      animation: fadeIn 300ms ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root">
+
     <!-- Critical header - matches React version exactly -->
     <!-- Top Bar -->
     <div class="w-[85%] mx-auto h-[90px] flex items-center justify-center overflow-hidden" style="padding-left: 1rem; padding-right: 1rem;">
-      <a href="https://www.project-epoch.net/" target="_blank" rel="noopener noreferrer" class="flex p-4">
+      <a href="https://www.ascension.gg/" target="_blank" rel="noopener noreferrer" class="flex p-4">
         <!-- Placeholder for logo - will be replaced by React -->
         <div style="width: 185px; height: 48px; background: transparent;"></div>
       </a>
+      <div class="ml-auto flex items-center">
+        <a href="https://github.com/MelEnt/mel-talent-calc" target="_blank" rel="noopener noreferrer" class="flex p-4">
+        <!-- Placeholder for logo - will be replaced by React -->
+        <div style="width: 100px; height: 48px; background: transparent;"></div>
+        </a>
+      </div>
     </div>
     
     <!-- Header Banner -->
-    <div id="critical-header" class="w-full h-[200px] relative flex items-center justify-center overflow-hidden" style="border-top: 3px solid #fffff; box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.36), 0px 0px 20px 10px rgba(0, 0, 0, 0.36); border-width: 1px; border-style: solid; border-color: #2b2b2b; border-left: 0; border-right: 0; filter: drop-shadow(2px 4px 6px black)">
+    <div id="critical-header" class="w-full h-[200px] relative flex items-center justify-center overflow-hidden" style="border-top: 3px solid #ffffff; box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.36), 0px 0px 20px 10px rgba(0, 0, 0, 0.36); border-width: 1px; border-style: solid; border-color: #2b2b2b; border-left: 0; border-right: 0; filter: drop-shadow(2px 4px 6px black)">
       <div class="header-bg-blur"></div>
       <h1 class="critical-h1" style="position: relative; z-index: 20;">Talent Calculator</h1>
     </div>

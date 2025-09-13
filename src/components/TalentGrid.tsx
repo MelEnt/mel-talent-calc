@@ -1,4 +1,24 @@
-import { lazy, Suspense } from 'react'
+import ClipboardJS from 'clipboard'
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import ShareSprite from '../assets/ui/share-btn-sprite-small2.webp?w=616&h=592&q=80&imagetools'
+import { CLASS_NAMES } from '../core/constants'
+import type { ClassName } from '../core/types'
+import { useTalentTrees } from '../core/useTalentTrees'
+import { showCopyToast } from '../lib/showCopyToast'
+import { showNewVersionToast } from '../lib/showNewVersionToast'
+import ClassCrest from './ClassCrest'
+import { ParchmentBorders } from './ParchmentBorders'
+import { TalentOrderSummary } from './TalentOrderSummary'
+import type { TalentTreeScrollerRef } from './TalentTreeScroller'
+import { showCustomConfirm } from '../core/useTalentTrees'
+import YesSpirit from '../assets/ui/red-button-yes.webp'
+import NoSpirit from '../assets/ui/red-button-no.webp'
 // Critical components for LCP - keep these eager
 const TalentTree = lazy(() =>
   import('./TalentTree').then(m => ({
@@ -21,22 +41,6 @@ const TalentTreeScroller = lazy(() =>
     default: m.TalentTreeScroller,
   }))
 )
-import { useTalentTrees } from '../core/useTalentTrees'
-import type { TalentTreeScrollerRef } from './TalentTreeScroller'
-import { ParchmentBorders } from './ParchmentBorders'
-import { showCopyToast } from '../lib/showCopyToast'
-import { showNewVersionToast } from '../lib/showNewVersionToast'
-import {
-  useState,
-  useEffect,
-  useRef,
-} from 'react'
-import type { ClassName } from '../core/types'
-import { CLASS_NAMES } from '../core/constants'
-import ClipboardJS from 'clipboard'
-import ShareSprite from '../assets/ui/share-btn-sprite-small2.webp?w=616&h=592&q=80&imagetools'
-import ClassCrest from './ClassCrest'
-import { TalentOrderSummary } from './TalentOrderSummary'
 
 const SELECTED_CLASS_KEY =
   'mel-talent-calc-selected-class'
@@ -110,9 +114,11 @@ export const TalentGrid = () => {
 
   // Check for data query parameter and show new version toast
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(
+      window.location.search
+    )
     const dataParam = params.get('data')
-    
+
     if (dataParam && !hasShownToastRef.current) {
       showNewVersionToast()
       hasShownToastRef.current = true
@@ -133,36 +139,36 @@ export const TalentGrid = () => {
 
   const shareBtnRef =
     useRef<HTMLButtonElement>(null)
-  const clipboardInstance =
-    useRef<ClipboardJS | null>(null)
+  const urlBtnRef =
+    useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    if (!shareBtnRef.current) return
+    const buttons = [shareBtnRef.current, urlBtnRef.current].filter(Boolean);
+    if (buttons.length === 0) return;
 
-    // Initialize ClipboardJS on the share button
-    clipboardInstance.current = new ClipboardJS(
-      shareBtnRef.current,
-      {
-        text: () => window.location.href,
-      }
-    )
+    const instances: ClipboardJS[] = buttons.map(
+      btn =>
+        new ClipboardJS(btn as Element, {
+          text: () => window.location.href,
+        })
+    );
 
-    clipboardInstance.current.on(
-      'success',
-      () => {
-        showCopyToast()
-      }
-    )
+    instances.forEach(instance => {
+      instance.on('success', () => {
+        showCopyToast();
+      });
 
-    clipboardInstance.current.on('error', e => {
-      console.error('Clipboard copy failed', e)
-      showCopyToast()
-    })
+      instance.on('error', e => {
+        console.error('Clipboard copy failed', e);
+        showCopyToast();
+      });
+    });
 
     return () => {
-      clipboardInstance.current?.destroy()
-    }
-  }, [])
+      instances.forEach(instance => instance.destroy());
+    };
+  }, []);
+
 
   const {
     trees,
@@ -186,8 +192,16 @@ export const TalentGrid = () => {
     tree => pointsSpentPerTree[tree.name] || 0
   )
 
-  const handleClassChange = (cls: ClassName) => {
-    resetAll()
+  const handleClassChange = async (cls: ClassName) => {
+    if (totalPointsSpent > 0) {
+      const shouldReset = await showCustomConfirm(
+        `Are you sure you want to change classes? You will loss your current build!
+        Last chance to save your build by copying the URL below or just cancel this!!!`
+      )
+      if (!shouldReset) return
+      
+    }
+    resetAll(false)
     setSelectedClass(cls)
   }
 
@@ -222,6 +236,70 @@ export const TalentGrid = () => {
   // Show full app when everything is ready
   return (
     <div>
+      <div id="customConfirmOverlay" className="confirm-overlay">
+        <div id="customConfirmDialog" className="confirm-dialog">
+          <p id="confirmMessage">
+            <span id="confirmText"></span>
+            <span
+              ref={urlBtnRef}
+              id="confirmUrl"
+              style={{
+                color: 'blue',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              }}
+            ></span>
+          </p>
+          <div className="confirm-buttons">
+            <button
+              id="confirmYes"
+              aria-label='Confirm Yes'
+              className='relative sm:top-1 w-[75px] h-[40px] bg-[length:80px_100px] bg-no-repeat sm:w-[75px] sm:h-[40px] sm:bg-[length:80px_100px] cursor-pointer'
+              style={{
+                backgroundImage: `url(${YesSpirit})`,
+                backgroundPosition: '0px 0px',
+                backgroundColor: 'transparent',
+              }}
+              onPointerDown={e => {
+                const isDesktop = window.innerWidth >= 640
+                e.currentTarget.style.backgroundPosition =
+                  isDesktop ? '0px -50px' : '0px -50px'
+              }}
+              onPointerUp={e => {
+                e.currentTarget.style.backgroundPosition = '0px 0px'
+              }}
+              onPointerLeave={e => {
+                e.currentTarget.style.backgroundPosition =
+                  '0px 0px'
+              }}
+            >
+            </button>
+            <button
+              id="confirmNo"
+              aria-label='Confirm No'
+              className='relative sm:top-1 w-[75px] h-[40px] bg-[length:80px_100px] bg-no-repeat sm:w-[75px] sm:h-[40px] sm:bg-[length:80px_100px] cursor-pointer'
+              style={{
+                backgroundImage: `url(${NoSpirit})`,
+                backgroundPosition: '0px 0px',
+                backgroundColor: 'transparent',
+              }}
+              onPointerDown={e => {
+                const isDesktop = window.innerWidth >= 640
+                e.currentTarget.style.backgroundPosition =
+                  isDesktop ? '0px -50px' : '0px -50px'
+              }}
+              onPointerUp={e => {
+                e.currentTarget.style.backgroundPosition = '0px 0px'
+              }}
+              onPointerLeave={e => {
+                e.currentTarget.style.backgroundPosition =
+                  '0px 0px'
+              }}
+            >
+            </button>
+          </div>
+        </div>
+      </div>
       <div className='max-w-[85rem] w-full m-auto overflow-x-hidden'>
         <div className='flex flex-col w-full gap-4'>
           <ParchmentBorders>
@@ -243,41 +321,6 @@ export const TalentGrid = () => {
                   handleClassChange
                 }
               />
-              <div className='flex justify-center sm:justify-end gap-4 z-1 items-end'>
-                {/* Share Button */}
-                <button
-                  ref={shareBtnRef}
-                  aria-label='Share'
-                  className='relative sm:top-1 w-[308px] h-[95px] bg-[length:308px_296px] bg-no-repeat sm:w-[308px] sm:h-[95px] sm:bg-[length:308px_296px] cursor-pointer'
-                  style={{
-                    backgroundImage: `url(${ShareSprite})`,
-                    backgroundPosition: '0px 0px',
-                  }}
-                  onMouseOver={e => {
-                    const isDesktop =
-                      window.innerWidth >= 640
-                    if (isDesktop)
-                      e.currentTarget.style.backgroundPosition =
-                        '0px -197px'
-                  }}
-                  onPointerDown={e => {
-                    const isDesktop =
-                      window.innerWidth >= 640
-                    e.currentTarget.style.backgroundPosition =
-                      isDesktop
-                        ? '-1px -99.5px'
-                        : '-1px -100px'
-                  }}
-                  onPointerUp={e => {
-                    e.currentTarget.style.backgroundPosition =
-                      '0px -197px'
-                  }}
-                  onPointerLeave={e => {
-                    e.currentTarget.style.backgroundPosition =
-                      '0px 0px'
-                  }}
-                />
-              </div>
             </div>
           </ParchmentBorders>
         </div>
@@ -311,14 +354,47 @@ export const TalentGrid = () => {
             ))}
           />
         </Suspense>
-        <div className='flex justify-center min-h-[20rem] w-[95%] md:w-[98%] text-white mx-auto'>
-          <TalentOrderSummary
-            cumulativePointsByLevel={
-              cumulativePointsByLevel
-            }
-            talentSpendOrder={talentSpendOrder}
+        <div className='flex justify-center text-white mx-auto'>
+          {/* Share Button */}
+          <button
+            ref={shareBtnRef}
+            aria-label='Share'
+            className='relative sm:top-1 w-[308px] h-[95px] bg-no-repeat cursor-pointer'
+            style={{
+              backgroundImage: `url(${ShareSprite})`,
+              backgroundSize: '308px 296px',
+            }}
+            onMouseOver={e => {
+              const isDesktop =
+                window.innerWidth >= 640
+              if (isDesktop)
+                e.currentTarget.style.backgroundPosition =
+                  '0px -197px'
+            }}
+            onPointerDown={e => {
+              const isDesktop =
+                window.innerWidth >= 640
+              e.currentTarget.style.backgroundPosition =
+                isDesktop
+                  ? '-1px -99.5px'
+                  : '-1px -100px'
+            }}
+            onPointerUp={e => {
+              e.currentTarget.style.backgroundPosition =
+                '0px -197px'
+            }}
+            onPointerLeave={e => {
+              e.currentTarget.style.backgroundPosition =
+                '0px 0px'
+            }}
           />
         </div>
+        <TalentOrderSummary
+          cumulativePointsByLevel={
+            cumulativePointsByLevel
+          }
+          talentSpendOrder={talentSpendOrder}
+        />
       </div>
     </div>
   )

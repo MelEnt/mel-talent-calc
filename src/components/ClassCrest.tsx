@@ -1,11 +1,13 @@
-import { useClassCrest } from '../hooks/useClassCrest'
 import type { ClassName } from '../core/types'
+import { useClassCrest } from '../hooks/useClassCrest'
+
+interface ClassCrestProps {
+  selectedClass: ClassName
+}
 
 const ClassCrest = ({
   selectedClass,
-}: {
-  selectedClass: ClassName
-}) => {
+}: ClassCrestProps) => {
   const { large, small } = useClassCrest(
     selectedClass
   )
@@ -13,22 +15,34 @@ const ClassCrest = ({
   return (
     <picture
       className='
-        absolute z-0 sm:opacity-50 opacity-40 pointer-events-none fade-mask
-        
-        w-[565px] h-[665px]             /* default size (desktop) */
-        right-[-30%] top-[15%]
-        sm:right-[-10%] sm:top-[10%]
-        md:right-0 md:top-0
-        [@media(min-width:994px)]:top-[-100px]
+      absolute z-0 pointer-events-none
+      w-[265px] h-[365px]
+      right-[-15%] top-[8%]
+      opacity-40
+      mr-15
+      sm:opacity-50
+      sm:right-[-10%]
+      sm:top-[15%]
 
-        /* For mobile ≤450px: smaller size & reposition */
-        [@media(max-width:403px)]:w-[280px]
-        [@media(max-width:403px)]:h-[330px]
-        [@media(max-width:403px)]:top-[220px]
-        [@media(max-width:403px)]:right-[-20%]
-        [@media(max-width:403px)]:scale-125
-        [@media(max-width:403px)]:opacity-33
-      '
+      md:right-0
+      md:top-0
+
+      lg:top-[-30px]
+
+      max-[403px]:w-[180px]
+      max-[403px]:h-[230px]
+      max-[403px]:top-[120px]
+      max-[403px]:right-[-10%]
+      max-[403px]:scale-100
+      max-[403px]:opacity-[0.33]
+
+      after:absolute
+      after:inset-0
+      after:bg-gradient-to-b
+      after:from-transparent
+      after:to-background/20
+      after:pointer-events-none
+    '
     >
       <source
         srcSet={`${small} 1x, ${large} 2x`}
@@ -37,12 +51,12 @@ const ClassCrest = ({
       />
       <img
         src={large}
-        alt={`${selectedClass} crest`}
-        width={565}
-        height={665}
+        alt={`${selectedClass} class crest`}
+        width={465}
+        height={565}
         className='w-full h-full object-contain'
         decoding='async'
-        loading='eager' // or lazy if offscreen
+        loading='eager'
       />
     </picture>
   )
