@@ -7,6 +7,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { imagetools } from 'vite-imagetools'
 
 export default defineConfig({
+  // Project page lives at https://<user>.github.io/mel-talent-calc/
+  base: '/mel-talent-calc/',
   server: {
     host: true,
   },
